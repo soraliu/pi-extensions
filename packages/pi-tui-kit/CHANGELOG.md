@@ -1,5 +1,11 @@
 # @narumitw/pi-tui-kit
 
+## 0.62.1
+
+### Patch Changes
+
+- 845bb04: Keep optimistic setting values stable when an older rejected save requests the same value as a newer queued change.
+
 ## 0.62.0
 
 ### Minor Changes
