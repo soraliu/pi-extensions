@@ -192,9 +192,17 @@ export default function statusline(pi: ExtensionAPI) {
             : loaded.config;
           const trueColor = getCapabilities().trueColor;
           const mainLine = renderStatusline(width, ctx, footerData, theme, config, runtime, trueColor);
-          const lines = mainLine ? mainLine.split("\n") : [];
-          lines.push(...renderExtensionStatusline(width, footerData, theme, config, runtime, mainLine, trueColor));
-          return lines;
+          const mainLines = mainLine ? mainLine.split("\n") : [];
+          const extensionLines = renderExtensionStatusline(
+            width,
+            footerData,
+            theme,
+            config,
+            runtime,
+            mainLine,
+            trueColor,
+          );
+          return config.extensionStatusesFirst ? [...extensionLines, ...mainLines] : [...mainLines, ...extensionLines];
         },
       };
     });

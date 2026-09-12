@@ -156,6 +156,44 @@ test("statusline renders PR context inline only when a branch is available", asy
   }
 });
 
+test("extension statuses render above the statusline when extensionStatusesFirst is enabled", async () => {
+  writeFileSync(join(suiteAgentDir, "pi-statusline.json"), '{"extensionStatusesFirst": true, "segments": ["model"]}');
+  try {
+    const mock = createMockPi();
+    statusline(mock.pi);
+    const context = createMockContext({ mode: "tui" });
+    await emit(mock.events, "session_start", {}, context.ctx);
+    const footerFactory = context.footer as (
+      tui: { requestRender(): void },
+      theme: { fg(_color: string, text: string): string; bold(text: string): string },
+      footerData: {
+        getGitBranch(): string | null;
+        getExtensionStatuses(): ReadonlyMap<string, string>;
+        onBranchChange(callback: () => void): () => void;
+      },
+    ) => { render(width: number): string[]; dispose(): void };
+    const footer = footerFactory(
+      { requestRender() {} },
+      { fg: (_color, text) => text, bold: (text) => text },
+      {
+        getGitBranch: () => null,
+        getExtensionStatuses: () => new Map([["goal", "🎯 active"]]),
+        onBranchChange: () => () => undefined,
+      },
+    );
+    try {
+      const lines = footer.render(300);
+      assert.match(lines[0] ?? "", /🎯 active/u);
+      assert.equal(lines.at(-1)?.includes("model"), true);
+      assert.equal(lines.filter((line) => /active/u.test(line)).length, 1);
+    } finally {
+      footer.dispose();
+    }
+  } finally {
+    rmSync(join(suiteAgentDir, "pi-statusline.json"), { force: true });
+  }
+});
+
 test("statusline honors the effective true-color capability", async () => {
   const previousCapabilities = getCapabilities();
   setCapabilities({ ...previousCapabilities, trueColor: false });

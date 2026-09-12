@@ -44,6 +44,7 @@ test("initial JSON exposes active defaults without materializing an inactive pal
     separator: "none",
     segments: ["thinking", "cwd", "branch", "tools", "context", "time"],
     rightSegments: ["session", "provider", "model"],
+    extensionStatusesFirst: false,
     segmentText: DEFAULT_STATUSLINE_CONFIG.segmentText,
     extensionStatusIcons: {
       accounts: "👤",
@@ -104,6 +105,12 @@ test("normalization supports partial icon-only settings and structured overrides
   assert.equal(iconOnly.config.palettePreset, "tokyo-night");
   assert.deepEqual(iconOnly.config.segments, DEFAULT_STATUSLINE_CONFIG.segments);
   assert.equal(iconOnly.config.extensionStatusIcons.goal, "◎");
+  assert.equal(DEFAULT_STATUSLINE_CONFIG.extensionStatusesFirst, false);
+  assert.equal(normalizeStatuslineConfig({}).config.extensionStatusesFirst, false);
+  assert.equal(normalizeStatuslineConfig({ extensionStatusesFirst: true }).config.extensionStatusesFirst, true);
+  const invalidFirst = normalizeStatuslineConfig({ extensionStatusesFirst: "yes" });
+  assert.equal(invalidFirst.config.extensionStatusesFirst, false);
+  assert.ok(invalidFirst.diagnostics.some((item) => item.path === "extensionStatusesFirst"));
 });
 
 test("model truncation settings use approachable defaults and normalize partial overrides", () => {

@@ -84,6 +84,7 @@ Selecting a level replaces only `segments` and preserves unrelated JSON fields.
 The `tools` segment takes no space while idle.
 `cache` takes no space when Pi has reported no cache reads or writes.
 `session` stays hidden until Pi names the session via `/name` and follows renames immediately.
+Extension-status rows render below the statusline by default; set `extensionStatusesFirst` to `true` in the settings JSON to place them above.
 
 ## 💬 Commands
 

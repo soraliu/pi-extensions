@@ -60,6 +60,7 @@ export const DEFAULT_STATUSLINE_CONFIG: StatuslineConfig = {
   separator: "none",
   segments: DEFAULT_SEGMENTS,
   rightSegments: DEFAULT_RIGHT_SEGMENTS,
+  extensionStatusesFirst: false,
   segmentText: {
     brand: { prefix: "", suffix: "" },
     provider: { prefix: "🔌 ", suffix: "" },
@@ -91,6 +92,7 @@ const DEFAULT_STATUSLINE_DOCUMENT_CONFIG = {
   separator: DEFAULT_STATUSLINE_CONFIG.separator,
   segments: DEFAULT_SEGMENTS,
   rightSegments: DEFAULT_RIGHT_SEGMENTS,
+  extensionStatusesFirst: DEFAULT_STATUSLINE_CONFIG.extensionStatusesFirst,
   segmentText: DEFAULT_STATUSLINE_CONFIG.segmentText,
   extensionStatusIcons: DEFAULT_DOCUMENT_EXTENSION_STATUS_ICONS,
 } satisfies Omit<StatuslineConfig, "palette">;
@@ -149,6 +151,7 @@ export function normalizeStatuslineConfig(value: unknown): {
     "separator",
     "segments",
     "rightSegments",
+    "extensionStatusesFirst",
     "segmentText",
     "extensionStatusIcons",
   ]);
@@ -163,6 +166,14 @@ export function normalizeStatuslineConfig(value: unknown): {
   }
   normalizeEnum(value, "density", DENSITIES, config, diagnostics);
   normalizeEnum(value, "separator", SEPARATOR_NAMES, config, diagnostics);
+  const statusesFirst = value.extensionStatusesFirst;
+  if (statusesFirst !== undefined) {
+    if (typeof statusesFirst !== "boolean") {
+      diagnostics.push(invalidDiagnostic("extensionStatusesFirst", "Expected a boolean"));
+    } else {
+      config.extensionStatusesFirst = statusesFirst;
+    }
+  }
 
   const explicitLeft = value.segments !== undefined;
   const explicitRight = value.rightSegments !== undefined;
