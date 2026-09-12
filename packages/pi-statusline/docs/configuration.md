@@ -35,6 +35,7 @@ If both files exist, `pi-statusline.json` wins.
 | `separator` | `none`, `dot`, `bar`, `powerline`, `round` | Separate adjacent segments in one color block |
 | `segments` | Ordered unique segment names and `line_break` | Control visibility, order, and rows of the left column |
 | `rightSegments` | Ordered unique segment names and `line_break` | Control the flush-right column |
+| `extensionStatusesFirst` | `true` or `false` | Render extension-status rows above the statusline columns instead of below them |
 | `segmentText` | Per-segment `prefix` and `suffix`; model truncation fields | Format Pi-owned dynamic values |
 | `extensionStatusIcons` | Raw status key or `namespace:*` to icon string | Customize extension status icons |
 

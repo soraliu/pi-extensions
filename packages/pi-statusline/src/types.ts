@@ -63,6 +63,8 @@ export interface StatuslineConfig {
   separator: SeparatorName;
   segments: ConfigSegmentName[];
   rightSegments: ConfigSegmentName[];
+  /** Render extension-status rows above the statusline columns instead of below them. */
+  extensionStatusesFirst: boolean;
   segmentText: Record<SegmentName, SegmentTextConfig> & { model: ModelSegmentTextConfig };
   extensionStatusIcons: Record<string, string>;
 }
